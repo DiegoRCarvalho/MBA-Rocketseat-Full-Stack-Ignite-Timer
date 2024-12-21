@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 
+export type ButtonVariant = 'primary' | 'secondary' | 'success' | 'danger'
+
 interface ButtonContainerProps {
-  variant: 'primary' | 'secondary' | 'success' | 'danger'
+  variant: ButtonVariant
 }
 
 export const ButtonContainer = styled.button`
