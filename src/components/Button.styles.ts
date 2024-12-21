@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export type ButtonVariant = 'primary' | 'secondary' | 'success' | 'danger'
 
@@ -26,7 +26,7 @@ export const ButtonContainer = styled.button<ButtonContainerProps>`
     props.variant  ---> acessar apenas a propriedade variant que está dentro de props.
   */
   ${props => {
-      return `background: ${buttonVariants[props.variant]}`
+      return css`background: ${buttonVariants[props.variant]}`
     }
   }
 `
