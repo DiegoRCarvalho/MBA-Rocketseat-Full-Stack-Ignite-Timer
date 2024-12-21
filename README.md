@@ -60,3 +60,58 @@ npm create vite@latest
 ### Se necessário, altere a porta padrão do Vite
 
 ![alt](./readme-images/0006.png)
+
+
+## Configurar o Eslint
+
+- Instalar tema da Rocketseat ou outro de sua preferência.
+
+  [Leia](https://github.com/Rocketseat/eslint-config-rocketseat/blob/main/README.md)
+
+  ```
+  npm i -D eslint @rocketseat/eslint-config
+  ```
+
+- Criar o arquivo ```.eslintrc.json``` com o seguinte conteúdo:
+
+  ~~~
+  {
+    "extends": "@rocketseat/eslint-config/react"
+  }
+  ~~~
+
+- Verificar erros nos arquivos manualmente
+
+  ```
+  npx eslint src --ext .ts,.tsx
+  ```
+
+- Ou habilitar a correção automática ao salvar o arquivo.
+
+  - No Vscode ``` CRTL + SHIFT + P``` e abrir a opção **Preferências: Abrir Configurações do Usuário (JSON)** ou **Preferences: Open User Settings (JSON)**.
+
+  - Alterar a propriedade ```"eslint.autoFixOnSave":``` para **true**
+
+  - Corrigir todos os arquivos da aplicação automaticamente.
+
+  ```
+  npx eslint src --ext .ts,.tsx --fix
+  ```
+
+- Outra opção é criar o script  ```"lint": "eslint src --ext .ts,.tsx"``` no **package.json**
+
+  ~~~
+  {
+    "name": "ignite-timer",
+    "private": true,
+    "version": "0.0.0",
+    "scripts": {
+      "dev": "vite --port 3001",
+      "build": "tsc && vite build",
+      "preview": "vite preview",
+      "lint": "eslint src --ext .ts,.tsx"
+    },
+  }
+  ~~~
+
+  - E para usar o script ```npm run lint```
