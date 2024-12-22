@@ -90,7 +90,19 @@ npm create vite@latest
 
   - No Vscode ``` CRTL + SHIFT + P``` e abrir a opção **Preferências: Abrir Configurações do Usuário (JSON)** ou **Preferences: Open User Settings (JSON)**.
 
-  - Alterar a propriedade ```"eslint.autoFixOnSave":``` para **true**
+  - Alterar as seguintes propriedades:
+
+    ~~~
+    {
+      "editor.formatOnSave": true,
+      "editor.codeActionsOnSave": {
+          "source.fixAll": true,
+          "source.fixAll.eslint": true,
+      },
+      "eslint.format.enable": true
+      "eslint.autoFixOnSave": true
+    }
+    ~~~
 
   - Corrigir todos os arquivos da aplicação automaticamente.
 
