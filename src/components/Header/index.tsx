@@ -1,7 +1,19 @@
+import { HeaderContainer } from './styles'
+import logo from '../../assets/logo.svg'
+import { Scroll, Timer } from 'phosphor-react'
+
 export function Header() {
   return (
-    <div>
-      <h1>Header</h1>
-    </div>
+    <HeaderContainer>
+      <img src={logo} alt="" />
+      <nav>
+        <a href="#">
+          <Timer size={24} />
+        </a>
+        <a href="#">
+          <Scroll size={24} />
+        </a>
+      </nav>
+    </HeaderContainer>
   )
 }
