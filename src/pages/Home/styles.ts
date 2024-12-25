@@ -97,6 +97,11 @@ const BaseInput = styled.input`
 export const TaskInput = styled(BaseInput)`
   // O FormContainer que é o elemento pai possui display flex, então no elemento filho usamos o flex 1 para informar que o elemento vai se adaptar ao espaço disponível.
   flex: 1;
+
+  // O comando abaixo remove a seta para baixo que é padrão do elemento datalist.
+  &::-webkit-calendar-picker-indicator {
+    display: none !important;
+  }
 `
 
 export const MinutesAmountInput = styled(BaseInput)`
