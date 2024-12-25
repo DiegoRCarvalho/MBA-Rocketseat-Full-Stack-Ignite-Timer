@@ -8,22 +8,35 @@ import {
   StartCountdownButton,
   TaskInput,
 } from './styles'
-import { useState } from 'react'
+// A função useForm da biblioteca react-hook-form faz a gestão de inputs controlled e uncontrolled melhor que o React.
+import { useForm } from 'react-hook-form'
 
 export function Home() {
-  const [taskInput, setTaskInput] = useState('')
-  const [taskMinutesAmountInput, setTaskMinutesAmountInput] = useState('')
+  /*
+    A função register retorna vários atributos dos inputs, como name, max, min, ref, required, onChange,disable, etc.
+    A função handleSubmit recebe uma função que 
+    A função watch fica observando se houveram alterações no valor do input.
+  */
+  const { register, handleSubmit, watch } = useForm()
+
+  const task = watch('task')
+  const isSubmitDisable = !task
+
+  // Função que recebe o data que possui os atributos dos inputs
+  function handleCreateNewCycle(data: any) {
+    console.log(data)
+  }
+
   return (
     <HomeContainer>
-      <form>
+      <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
         <FormContainer>
           <label htmlFor="task">Vou trabalhar em</label>
           <TaskInput
             id="task"
             placeholder="Dê um nome para o seu projeto"
             list="task-suggestions"
-            onChange={(e) => setTaskInput(e.target.value)}
-            value={taskInput}
+            {...register('task')} // permite recuperar todos os atributos do elemento input.
           />
           <datalist id="task-suggestions">
             <option value="Projeto 1" />
@@ -39,8 +52,7 @@ export function Home() {
             step={5}
             min={5}
             max={60}
-            onChange={(e) => setTaskMinutesAmountInput(e.target.value)}
-            value={taskMinutesAmountInput}
+            {...register('minutesAmount', { valueAsNumber: true })} // A segunda propriedade permite converter o tipo para número.
           />
           <span>minutos.</span>
         </FormContainer>
@@ -51,7 +63,7 @@ export function Home() {
           <span>0</span>
           <span>0</span>
         </CountdownContainer>
-        <StartCountdownButton disabled={!taskInput} type="submit">
+        <StartCountdownButton disabled={isSubmitDisable} type="submit">
           <Play size={24} />
           Começar
         </StartCountdownButton>
