@@ -10,14 +10,29 @@ import {
 } from './styles'
 // A função useForm da biblioteca react-hook-form faz a gestão de inputs controlled e uncontrolled melhor que o React.
 import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod/dist/zod.js'
+
+// A biblioteca não possui o export default, logo utilizamos o * as zod.
+import * as zod from 'zod'
+
+const newCycleFormValidationSchema = zod.object({
+  task: zod.string().min(1, 'Informe a tarefa'),
+  minutesAmout: zod
+    .number()
+    .min(5, 'Valor mínimo é de 5 minutos')
+    .max(60, 'Valor máximo é de 60 minutos.'),
+})
 
 export function Home() {
   /*
     A função register retorna vários atributos dos inputs, como name, max, min, ref, required, onChange,disable, etc.
     A função handleSubmit recebe uma função que 
     A função watch fica observando se houveram alterações no valor do input.
+    O useForm/resolver recebe um objeto com as regras de validação
   */
-  const { register, handleSubmit, watch } = useForm()
+  const { register, handleSubmit, watch } = useForm({
+    resolver: zodResolver(newCycleFormValidationSchema),
+  })
 
   const task = watch('task')
   const isSubmitDisable = !task
