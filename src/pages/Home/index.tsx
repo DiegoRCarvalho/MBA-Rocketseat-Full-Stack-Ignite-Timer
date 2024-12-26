@@ -32,7 +32,7 @@ export function Home() {
     A função watch fica observando se houveram alterações no valor do input.
     O useForm/resolver recebe um objeto com as regras de validação
   */
-  const { register, handleSubmit, watch } = useForm<NewCycleFormData>({
+  const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
     resolver: zodResolver(newCycleFormValidationSchema),
     defaultValues: {
       task: '',
@@ -46,6 +46,7 @@ export function Home() {
   // Função que recebe o data que possui os atributos dos inputs
   function handleCreateNewCycle(data: NewCycleFormData) {
     console.log(data)
+    reset() // A função reset do useForm é utilizada para resetar os valores dos inputs com o conteúdo definido no default value. Lembre de declarar todos os inputs.
   }
 
   return (
