@@ -17,16 +17,13 @@ import * as zod from 'zod'
 
 const newCycleFormValidationSchema = zod.object({
   task: zod.string().min(1, 'Informe a tarefa'),
-  minutesAmout: zod
+  minutesAmount: zod
     .number()
     .min(5, 'Valor mínimo é de 5 minutos')
     .max(60, 'Valor máximo é de 60 minutos.'),
 })
 
-interface NewCycleFormData {
-  task: string
-  minutesAmount: number
-}
+type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
 
 export function Home() {
   /*
@@ -47,7 +44,7 @@ export function Home() {
   const isSubmitDisable = !task
 
   // Função que recebe o data que possui os atributos dos inputs
-  function handleCreateNewCycle(data: any) {
+  function handleCreateNewCycle(data: NewCycleFormData) {
     console.log(data)
   }
 
