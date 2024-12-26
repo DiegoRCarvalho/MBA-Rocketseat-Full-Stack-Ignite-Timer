@@ -23,6 +23,11 @@ const newCycleFormValidationSchema = zod.object({
     .max(60, 'Valor máximo é de 60 minutos.'),
 })
 
+interface NewCycleFormData {
+  task: string
+  minutesAmount: number
+}
+
 export function Home() {
   /*
     A função register retorna vários atributos dos inputs, como name, max, min, ref, required, onChange,disable, etc.
@@ -30,8 +35,12 @@ export function Home() {
     A função watch fica observando se houveram alterações no valor do input.
     O useForm/resolver recebe um objeto com as regras de validação
   */
-  const { register, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch } = useForm<NewCycleFormData>({
     resolver: zodResolver(newCycleFormValidationSchema),
+    defaultValues: {
+      task: '',
+      minutesAmount: 0,
+    },
   })
 
   const task = watch('task')
