@@ -35,6 +35,7 @@ interface Cycle {
 export function Home() {
   const [cycles, setCycles] = useState<Cycle[]>([])
   const [activeCycleId, setActiveCycleId] = useState<string | null>(null) // guarda o id do cyclo que está ativo.
+  const [amountSecondPassed, setAmountSecondPassed] = useState(0) // Essa variável armazena quantos segundos já se passaram desde que o ciclo se iniciou.
 
   /*
     A função register retorna vários atributos dos inputs, como name, max, min, ref, required, onChange,disable, etc.
@@ -72,6 +73,14 @@ export function Home() {
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
   console.log(activeCycle)
 
+  const totalSeconds = activeCycle ? activeCycle?.minutesAmount * 60 : 0 // Se existir um ciclo ativo calcula quantos segundos ele representa
+  const currentSeconds = activeCycle ? totalSeconds - amountSecondPassed : 0
+  const minutesAmount = Math.floor(currentSeconds / 60) // Descobrir quantos minutos ainda faltam.
+  const secondsAmount = currentSeconds % 60 // Pegar os segundos que restam da divisão.
+  // Converter minutos e segundos para string e adicionar um zero no inicio se o número for menor adiciona um zero
+  const minutes = String(minutesAmount).padStart(2, '0')
+  const seconds = String(secondsAmount).padStart(2, '0')
+
   return (
     <HomeContainer>
       <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
@@ -102,11 +111,12 @@ export function Home() {
           <span>minutos.</span>
         </FormContainer>
         <CountdownContainer>
-          <span>0</span>
-          <span>0</span>
+          {/* Os minutos e segundos foram convertidos para string, logo podem ser acessados como vetores. */}
+          <span>{minutes[0]}</span>
+          <span>{minutes[1]}</span>
           <Separator>:</Separator>
-          <span>0</span>
-          <span>0</span>
+          <span>{seconds[0]}</span>
+          <span>{seconds[1]}</span>
         </CountdownContainer>
         <StartCountdownButton disabled={isSubmitDisable} type="submit">
           <Play size={24} />
