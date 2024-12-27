@@ -14,6 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod/dist/zod.js'
 
 // A biblioteca não possui o export default, logo utilizamos o * as zod.
 import * as zod from 'zod'
+import { useState } from 'react'
 
 const newCycleFormValidationSchema = zod.object({
   task: zod.string().min(1, 'Informe a tarefa'),
@@ -25,7 +26,16 @@ const newCycleFormValidationSchema = zod.object({
 
 type NewCycleFormData = zod.infer<typeof newCycleFormValidationSchema>
 
+interface Cycle {
+  id: string
+  task: string
+  minutesAmount: number
+}
+
 export function Home() {
+  const [cycles, setCycles] = useState<Cycle[]>([])
+  const [activeCycleId, setActiveCycleId] = useState<string | null>(null) // guarda o id do cyclo que está ativo.
+
   /*
     A função register retorna vários atributos dos inputs, como name, max, min, ref, required, onChange,disable, etc.
     A função handleSubmit recebe uma função que 
@@ -45,9 +55,22 @@ export function Home() {
 
   // Função que recebe o data que possui os atributos dos inputs
   function handleCreateNewCycle(data: NewCycleFormData) {
-    console.log(data)
+    const id = String(new Date().getTime())
+    const newCycle: Cycle = {
+      id,
+      task: data.task,
+      minutesAmount: data.minutesAmount,
+    }
+
+    setCycles((state) => [...state, newCycle])
+    setActiveCycleId(id)
+
     reset() // A função reset do useForm é utilizada para resetar os valores dos inputs com o conteúdo definido no default value. Lembre de declarar todos os inputs.
   }
+
+  // Mostrar o ciclo ativo
+  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
+  console.log(activeCycle)
 
   return (
     <HomeContainer>
