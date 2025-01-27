@@ -1,4 +1,4 @@
-import { Play } from 'phosphor-react'
+import { HandPalm, Play } from 'phosphor-react'
 import {
   CountdownContainer,
   FormContainer,
@@ -6,6 +6,7 @@ import {
   MinutesAmountInput,
   Separator,
   StartCountdownButton,
+  StopCountdownButton,
   TaskInput,
 } from './styles'
 // A função useForm da biblioteca react-hook-form faz a gestão de inputs controlled e uncontrolled melhor que o React.
@@ -33,6 +34,7 @@ interface Cycle {
   task: string
   minutesAmount: number
   startDate: Date
+  interruptedDate?: Date
 }
 
 export function Home() {
@@ -91,6 +93,19 @@ export function Home() {
     reset() // A função reset do useForm é utilizada para resetar os valores dos inputs com o conteúdo definido no default value. Lembre de declarar todos os inputs.
   }
 
+  function handleInterruptCycle() {
+    setCycles(
+      cycles.map((cycle) => {
+        if (cycle.id === activeCycleId) {
+          return { ...cycle, interruptedDate: new Date() }
+        } else {
+          return cycle
+        }
+      }),
+    )
+    setActiveCycleId(null)
+  }
+
   const totalSeconds = activeCycle ? activeCycle?.minutesAmount * 60 : 0 // Se existir um ciclo ativo calcula quantos segundos ele representa
   const currentSeconds = activeCycle ? totalSeconds - amountSecondPassed : 0
   const minutesAmount = Math.floor(currentSeconds / 60) // Descobrir quantos minutos ainda faltam.
@@ -113,6 +128,7 @@ export function Home() {
           <TaskInput
             id="task"
             placeholder="Dê um nome para o seu projeto"
+            disabled={!!activeCycle}
             list="task-suggestions"
             {...register('task')} // permite recuperar todos os atributos do elemento input.
           />
@@ -130,6 +146,7 @@ export function Home() {
             step={5}
             min={5}
             max={60}
+            disabled={!!activeCycle}
             {...register('minutesAmount', { valueAsNumber: true })} // A segunda propriedade permite converter o tipo para número.
           />
           <span>minutos.</span>
@@ -142,10 +159,17 @@ export function Home() {
           <span>{seconds[0]}</span>
           <span>{seconds[1]}</span>
         </CountdownContainer>
-        <StartCountdownButton disabled={isSubmitDisable} type="submit">
-          <Play size={24} />
-          Começar
-        </StartCountdownButton>
+        {activeCycle ? (
+          <StopCountdownButton onClick={handleInterruptCycle} type="button">
+            <HandPalm size={24} />
+            Interroper
+          </StopCountdownButton>
+        ) : (
+          <StartCountdownButton disabled={isSubmitDisable} type="submit">
+            <Play size={24} />
+            Começar
+          </StartCountdownButton>
+        )}
       </form>
     </HomeContainer>
   )
