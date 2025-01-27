@@ -35,6 +35,7 @@ interface Cycle {
   minutesAmount: number
   startDate: Date
   interruptedDate?: Date
+  finishedDate?: Date
 }
 
 export function Home() {
@@ -61,20 +62,38 @@ export function Home() {
 
   // Mostrar o ciclo ativo
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
+  const totalSeconds = activeCycle ? activeCycle?.minutesAmount * 60 : 0 // Se existir um ciclo ativo calcula quantos segundos ele representa
 
   useEffect(() => {
     let interval: number
     if (activeCycle) {
       interval = setInterval(() => {
-        setAmountSecondPassed(
-          differenceInSeconds(new Date(), activeCycle.startDate),
+        const secondsDifference = differenceInSeconds(
+          new Date(),
+          activeCycle.startDate,
         )
+
+        if (secondsDifference >= totalSeconds) {
+          setCycles((state) =>
+            state.map((cycle) => {
+              if (cycle.id === activeCycleId) {
+                return { ...cycle, finishedDate: new Date() }
+              } else {
+                return cycle
+              }
+            }),
+          )
+          setAmountSecondPassed(totalSeconds)
+          clearInterval(interval)
+        } else {
+          setAmountSecondPassed(secondsDifference)
+        }
       }, 1000)
     }
     return () => {
       clearInterval(interval)
     }
-  }, [activeCycle])
+  }, [activeCycle, totalSeconds, activeCycleId])
 
   // Função que recebe o data que possui os atributos dos inputs
   function handleCreateNewCycle(data: NewCycleFormData) {
@@ -94,8 +113,8 @@ export function Home() {
   }
 
   function handleInterruptCycle() {
-    setCycles(
-      cycles.map((cycle) => {
+    setCycles((state) =>
+      state.map((cycle) => {
         if (cycle.id === activeCycleId) {
           return { ...cycle, interruptedDate: new Date() }
         } else {
@@ -106,7 +125,6 @@ export function Home() {
     setActiveCycleId(null)
   }
 
-  const totalSeconds = activeCycle ? activeCycle?.minutesAmount * 60 : 0 // Se existir um ciclo ativo calcula quantos segundos ele representa
   const currentSeconds = activeCycle ? totalSeconds - amountSecondPassed : 0
   const minutesAmount = Math.floor(currentSeconds / 60) // Descobrir quantos minutos ainda faltam.
   const secondsAmount = currentSeconds % 60 // Pegar os segundos que restam da divisão.
