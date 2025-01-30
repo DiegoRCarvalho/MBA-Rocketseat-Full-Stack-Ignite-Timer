@@ -3,6 +3,7 @@ import styled from 'styled-components'
 export const HistoryContainer = styled.main`
   flex: 1;
   padding: 3.5rem;
+
   display: flex;
   flex-direction: column;
 
@@ -19,43 +20,43 @@ export const HistoryList = styled.div`
 
   table {
     width: 100%;
-    border-collapse: collapse; // Entre duas células da tabela aparece apenas uma borda e não a soma delas.
+    border-collapse: collapse;
     min-width: 600px;
-  }
 
-  th {
-    background: ${(props) => props.theme['gray-600']};
-    padding: 1rem;
-    text-align: left;
-    color: ${(props) => props.theme['gray-100']};
-    font-size: 0.875rem;
-    line-height: 1.6;
+    th {
+      background-color: ${(props) => props.theme['gray-600']};
+      padding: 1rem;
+      text-align: left;
+      color: ${(props) => props.theme['gray-100']};
+      font-size: 0.875rem;
+      line-height: 1.6;
 
-    &:first-child {
-      border-top-left-radius: 8px;
-      padding-left: 1.5rem;
+      &:first-child {
+        border-top-left-radius: 8px;
+        padding-left: 1.5rem;
+      }
+
+      &:last-child {
+        border-top-right-radius: 8px;
+        padding-right: 1.5rem;
+      }
     }
 
-    &:last-child {
-      border-top-right-radius: 8px;
-      padding-right: 1.5rem;
-    }
-  }
+    td {
+      background-color: ${(props) => props.theme['gray-700']};
+      border-top: 4px solid ${(props) => props.theme['gray-800']};
+      padding: 1rem;
+      font-size: 0.875rem;
+      line-height: 1.6;
 
-  td {
-    background: ${(props) => props.theme['gray-700']};
-    border-top: 4px solid ${(props) => props.theme['gray-800']};
-    padding: 1rem;
-    font-size: 0%.875rem;
-    line-height: 1.6;
+      &:first-child {
+        width: 50%;
+        padding-left: 1.5rem;
+      }
 
-    &:first-child {
-      width: 55%;
-      padding-left: 1.5rem;
-    }
-
-    &:last-child {
-      padding-right: 1.5rem;
+      &:last-child {
+        padding-right: 1.5rem;
+      }
     }
   }
 `
@@ -64,10 +65,10 @@ const STATUS_COLORS = {
   yellow: 'yellow-500',
   green: 'green-500',
   red: 'red-500',
-} as const // Utilizado para informar ao Typescript que esse texto nunca irá mudar.
+} as const
 
 interface StatusProps {
-  statusColor: keyof typeof STATUS_COLORS // O Typescript não consegue ler objetos Javascript ele consegue ler apenas a tipagem dos objetos.
+  statusColor: keyof typeof STATUS_COLORS
 }
 
 export const Status = styled.span<StatusProps>`
@@ -76,10 +77,10 @@ export const Status = styled.span<StatusProps>`
   gap: 0.5rem;
 
   &::before {
-    content: ''; // Para que o elemento possa aparecer em tela precisa ter um conteúdo, mesmo que vazio.
+    content: '';
     width: 0.5rem;
     height: 0.5rem;
-    border-radius: 50%;
+    border-radius: 9999px;
     background: ${(props) => props.theme[STATUS_COLORS[props.statusColor]]};
   }
 `
